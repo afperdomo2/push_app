@@ -60,7 +60,7 @@ class ApptTheme {
     ),
 
     // Personalización de tarjetas
-    cardTheme: CardTheme(
+    cardTheme: CardThemeData(
       elevation: 3,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),

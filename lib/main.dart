@@ -1,10 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:push_app/config/router/app_router.dart';
 import 'package:push_app/config/theme/app_theme.dart';
 import 'package:push_app/features/home/blocs/notifications/notifications_bloc.dart';
+import 'package:push_app/firebase_options.dart';
 
-void main() {
+void main() async {
+  // Inicializar Firebase y WidgetsFlutterBinding
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   runApp(
     MultiBlocProvider(
       providers: [
