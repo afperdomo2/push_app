@@ -12,6 +12,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     on<NotificationStatusChanged>(_updateNotificationState);
 
     _initializeNotificationStatus();
+    _handleForegroundNotification();
   }
 
   void _initializeNotificationStatus() async {
@@ -51,5 +52,19 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       sound: true,
     );
     add(NotificationStatusChanged(settings.authorizationStatus));
+  }
+
+  /// Maneja las notificaciones recibidas mientras la aplicación está en primer plano.
+  void _handleForegroundNotification() {
+    FirebaseMessaging.onMessage.listen(_handleRemoteMessage);
+  }
+
+  void _handleRemoteMessage(RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Message data: ${message.data}');
+
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
   }
 }
