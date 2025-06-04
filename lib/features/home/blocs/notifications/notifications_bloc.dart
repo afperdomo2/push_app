@@ -19,6 +19,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     add(NotificationStatusChanged(settings.authorizationStatus));
   }
 
+  /// Obtiene el token de FCM (Firebase Cloud Messaging) del dispositivo.
   void _getFCMToken() async {
     final settings = await messaging.getNotificationSettings();
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
