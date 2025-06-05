@@ -1,6 +1,6 @@
 # push_app
 
-## 📩 Firebase Messaging
+## 📩 1. Firebase Messaging
 
 Firebase Cloud Messaging (FCM) es un servicio de Google que permite enviar notificaciones push de forma confiable y eficiente a dispositivos móviles y aplicaciones web.
 
@@ -12,11 +12,11 @@ Firebase Cloud Messaging (FCM) es un servicio de Google que permite enviar notif
 - Firebase Cloud Messaging:
 <https://firebase.flutter.dev/docs/messaging/overview>
 
-## 🔧 Firebase CLI
+## 🔧 2. Firebase CLI
 
 Firebase Command Line Interface (CLI) es una herramienta que proporciona comandos para administrar y desplegar aplicaciones y recursos de Firebase desde la línea de comandos.
 
-### Instalación
+### 2.1 Instalación
 
 Documentación: <https://firebase.google.com/docs/cli?hl=es-419>
 
@@ -37,7 +37,7 @@ firebase projects:list
 firebase deploy
 ```
 
-### Configurar Firebase en proyecto de Flutter
+### 2.2 Configurar Firebase en el proyecto de Flutter
 
 - ☢️Ubicarse en la carpeta del proyecto
 - ☢️Se puede crear un proyecto de Firebase o también tener uno ya listo y solo usarlo
@@ -46,13 +46,52 @@ firebase deploy
 # Instala la CLI si aún no lo has hecho
 dart pub global activate flutterfire_cli
 
-# Ejecuta el comando `configure`, selecciona un proyecto de Firebase y las plataformas
+# Ejecuta el comando `configure`, selecciona un proyecto de Firebase y las plataformas (Ej: android, ios, etc)
 dart pub global run flutterfire_cli:flutterfire configure
 ```
 
-## ⛑️ Ayuda
+## 🔔 3. Notificaciones push3. Notificaciones push
 
-### 🗺️ Guías
+Las notificaciones push son mensajes que se envían desde un servidor a dispositivos específicos, permitiendo interactuar con usuarios incluso cuando la aplicación no está abierta.
+
+Plataformas para enviar notificaciones push:
+
+- **Firebase Cloud Messaging (FCM):** Solución gratuita de Google. Permite enviar notificaciones a Android, iOS y web. Ofrece consola visual para envíos manuales o API para automatización
+
+- **OneSignal:** Plataforma especializada en notificaciones
+Interfaz amigable y potentes analíticas
+Plan gratuito con límites y planes pagos
+
+- **Amazon SNS:** Servicio de AWS para notificaciones. Escalable para aplicaciones grandes. Integración con otros servicios de AWS
+
+- **Pusher:** Plataforma de comunicación en tiempo real. Buena para aplicaciones que requieren interacción inmediata. Para implementar notificaciones push en Flutter, necesitarás:
+
+### 🔥 3.1 Firebase Console
+
+Para enviar notificaciones push a dispositivos Android desde Firebase Console:
+
+1. **Accede a Firebase Console**: Ve a <https://console.firebase.google.com/> e inicia sesión
+
+2. **Selecciona tu proyecto**: Haz clic en el proyecto donde tienes configurada tu app Flutter
+
+3. **Navega a Cloud Messaging**: Selecciona el menú de `Ejecución > Messaging`
+
+4. **Crea una notificación**:
+
+- Haz clic en `Crear tu primera campaña`
+- Selecciona `Mensajes de Firebase Notifications` como tipo de campaña
+
+5. **Configura la notificación**:
+
+- Llenar los datos del formulario
+- En destinararios, elige "App" para enviar a toda la app. O usa segmentación por temas o tokens específicos
+- Configura cuándo enviar la notificación
+- Revisa los detalles y haz clic en "Publicar"
+- Monitorea los informes de entrega en la sección "Reporting"
+
+## ⛑️ 4. Ayuda
+
+### 🗺️ 4.1 Guías
 
 **Comillas simples en vez de dobles:**
 
@@ -76,7 +115,7 @@ flutter analyze
 dart fix --apply
 ```
 
-### ⌨️ Comandos útiles
+### ⌨️ 4.2 Comandos útiles
 
 ```bash
 # Instalar los paquetes o dependencias
