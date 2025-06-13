@@ -15,23 +15,13 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     _handleForegroundNotification();
   }
 
+  /// Inicializa el estado de las notificaciones y obtiene el token FCM.
   void _initializeNotificationStatus() async {
     final settings = await messaging.getNotificationSettings();
     add(NotificationStatusChanged(settings.authorizationStatus));
   }
 
-  /// Obtiene el token de FCM (Firebase Cloud Messaging) del dispositivo.
-  void _getFCMToken() async {
-    final settings = await messaging.getNotificationSettings();
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      final token = await messaging.getToken();
-      print('🔑FCM Token: $token');
-    } else {
-      print('❌Notifications are not authorized.');
-    }
-  }
-
-  /// Cambia el estado de las notificaciones.
+  /// Actualiza el estado de las notificaciones.
   void _updateNotificationState(
     NotificationStatusChanged event,
     Emitter<NotificationsState> emit,
@@ -65,6 +55,19 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
     if (message.notification != null) {
       print('Message also contained a notification: ${message.notification}');
+    }
+  }
+
+  /// Obtiene el token de FCM (Firebase Cloud Messaging) del dispositivo.
+  void _getFCMToken() async {
+    final settings = await messaging.getNotificationSettings();
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      final token = await messaging.getToken();
+      // ignore: avoid_print
+      print('🔑FCM Token: $token');
+    } else {
+      // ignore: avoid_print
+      print('❌Notifications are not authorized.');
     }
   }
 }
