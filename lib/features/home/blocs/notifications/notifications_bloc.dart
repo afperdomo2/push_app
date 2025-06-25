@@ -14,7 +14,9 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
 
   NotificationsBloc() : super(const NotificationsInitial()) {
+    // Escucha los cambios en el estado de las notificaciones
     on<NotificationStatusChanged>(_updateNotificationState);
+    on<NotificationReceived>(_onPushMessageReceived);
 
     _initializeNotificationStatus();
     _handleForegroundNotification();
@@ -33,6 +35,14 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   ) {
     emit(state.copyWith(status: event.status));
     _getFCMToken();
+  }
+
+  /// Maneja la recepción de mensajes push.
+  _onPushMessageReceived(
+    NotificationReceived event,
+    Emitter<NotificationsState> emit,
+  ) {
+    emit(state.copyWith(notificationList: [event.message, ...state.notificationList]));
   }
 
   /// Solicita permiso para enviar notificaciones al usuario.
@@ -76,6 +86,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
           : message.notification?.apple?.imageUrl,
     );
 
+    add(NotificationReceived(notification));
     print(notification);
   }
 

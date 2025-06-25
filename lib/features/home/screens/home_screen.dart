@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:push_app/domain/entities/push_message.dart';
 import 'package:push_app/features/home/blocs/notifications/notifications_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -9,6 +10,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final notificationsState = context.watch<NotificationsBloc>().state;
     final notificationsBloc = context.read<NotificationsBloc>();
+
+    final notificationList = notificationsState.notificationList;
 
     return Scaffold(
       appBar: AppBar(
@@ -27,8 +30,69 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 24),
 
             _NotificationRequestButton(notificationsBloc: notificationsBloc),
+
+            const SizedBox(height: 24),
+
+            // List of notifications
+            _NotificationListView(notificationList: notificationList),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _NotificationListView extends StatelessWidget {
+  const _NotificationListView({
+    required this.notificationList,
+  });
+
+  final List<PushMessage> notificationList;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (notificationList.isEmpty)
+            const Text(
+              'No notifications received yet.',
+              style: TextStyle(fontSize: 16, color: Colors.grey),
+            )
+          else
+            const Text(
+              'Received Notifications:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          Expanded(
+            child: ListView.builder(
+              itemCount: notificationList.length,
+              itemBuilder: (context, index) {
+                final notification = notificationList[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: ListTile(
+                    title: Text(notification.title),
+                    subtitle: Text(notification.body),
+                    leading: notification.imageUrl != null && notification.imageUrl!.isNotEmpty
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              notification.imageUrl!,
+                              width: 50,
+                              height: 50,
+                              fit: BoxFit.cover,
+                              errorBuilder: (context, _, __) => const Icon(Icons.notifications),
+                            ),
+                          )
+                        : const Icon(Icons.notifications),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
