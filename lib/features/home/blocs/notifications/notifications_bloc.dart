@@ -100,4 +100,16 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       print('❌Las notificaciones no están autorizadas.');
     }
   }
+
+  PushMessage getNotificationById(String id) {
+    return state.notificationList.firstWhere(
+      (notification) => notification.id == id,
+      orElse: () => PushMessage(
+        id: 'no-id',
+        title: 'Notificación no encontrada',
+        body: 'No se encontró una notificación con el ID proporcionado.',
+        timestamp: DateTime.now(),
+      ),
+    );
+  }
 }

@@ -26,4 +26,6 @@ class PushMessage {
       data: $data,
     )''';
   }
+
+  static empty() {}
 }
