@@ -18,7 +18,17 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 void main() async {
-  // Inicializar Firebase y WidgetsFlutterBinding
+  /// Inicializa el binding de Flutter y Firebase antes de ejecutar la aplicación.
+  ///
+  /// [WidgetsFlutterBinding.ensureInitialized] se llama para establecer el binding
+  /// entre el framework de Flutter y la plataforma host. Esto debe llamarse antes
+  /// de utilizar cualquier canal de plataforma.
+  ///
+  /// [Firebase.initializeApp] inicializa el SDK de Firebase con las opciones
+  /// específicas de la plataforma apropiadas, permitiendo que la aplicación use
+  /// servicios de Firebase como autenticación, Firestore, analytics, etc.
+  ///
+  /// Esta inicialización debe completarse antes de que la aplicación inicie, de ahí el uso de 'await'.
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -45,7 +55,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp.router(
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
-      theme: ApptTheme.theme,
+      theme: AppTheme.theme,
     );
   }
 }

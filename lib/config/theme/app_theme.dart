@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ApptTheme {
+class AppTheme {
   static const Color _primaryColor = Color(0xFF6750A4); // Morado elegante
   static const Color _secondaryColor = Color(0xFF03DAC6); // Verde azulado
   static const Color _errorColor = Color(0xFFB00020); // Rojo oscuro
