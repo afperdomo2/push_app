@@ -3,8 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:push_app/domain/entities/push_message.dart';
 import 'package:push_app/features/home/blocs/notifications/notifications_bloc.dart';
+import 'package:push_app/features/home/screens/notification_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
+  static const String routeName = 'home';
+
   const HomeScreen({super.key});
 
   @override
@@ -91,7 +94,12 @@ class _NotificationListView extends StatelessWidget {
                     trailing: const Icon(Icons.arrow_forward_ios),
 
                     // Navegar a la pantalla de detalles de la notificación
-                    onTap: () => context.push('/notification/${notification.id}'),
+                    onTap: () => {
+                      context.pushNamed(
+                        NotificationDetailsScreen.routeName,
+                        pathParameters: {'messageId': notification.id},
+                      ),
+                    },
                   ),
                 );
               },

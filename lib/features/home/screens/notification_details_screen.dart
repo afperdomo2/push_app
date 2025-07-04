@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:push_app/features/home/blocs/notifications/notifications_bloc.dart';
 
 class NotificationDetailsScreen extends StatelessWidget {
+  static const String routeName = 'notificationDetails';
+
   final String messageId;
 
   const NotificationDetailsScreen({
