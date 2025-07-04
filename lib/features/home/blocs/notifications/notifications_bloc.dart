@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:push_app/config/helpers/message_utils.dart';
 import 'package:push_app/domain/entities/push_message.dart';
 
 part 'notifications_event.dart';
@@ -61,11 +62,11 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
 
   /// Maneja las notificaciones recibidas mientras la aplicación está en primer plano.
   void _handleForegroundNotification() {
-    FirebaseMessaging.onMessage.listen(_handleRemoteMessage);
+    FirebaseMessaging.onMessage.listen(handleRemoteMessage);
   }
 
   /// Maneja los mensajes remotos recibidos mientras la aplicación está en primer plano.
-  void _handleRemoteMessage(RemoteMessage message) {
+  void handleRemoteMessage(RemoteMessage message) {
     print('¡Se recibió un mensaje mientras la aplicación estaba en primer plano!');
     print('Datos del mensaje: ${message.data}');
 
@@ -73,7 +74,7 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
       print('El mensaje también contenía una notificación: ${message.notification}');
     }
 
-    final messageId = message.messageId?.replaceAll(':', '').replaceAll('%', '') ?? 'no-id';
+    final messageId = MessageUtils.cleanMessageId(message.messageId);
 
     final notification = PushMessage(
       id: messageId,
