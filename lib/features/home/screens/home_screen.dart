@@ -185,17 +185,28 @@ class _NotificationRequestButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final notificationsState = context.watch<NotificationsBloc>().state;
+    final isAuthorized = notificationsState.status.name == 'authorized';
+
     return ElevatedButton.icon(
-      onPressed: () {
-        notificationsBloc.requestPermission();
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Requesting notification permission...')),
-        );
-      },
-      icon: const Icon(Icons.notifications_active),
-      label: const Text('Enable Notifications'),
+      onPressed: isAuthorized
+          ? null
+          : () {
+              notificationsBloc.requestPermission();
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Requesting notification permission...')),
+              );
+            },
+      icon: Icon(
+        isAuthorized ? Icons.check_circle : Icons.notifications_active,
+      ),
+      label: Text(
+        isAuthorized ? 'Notifications Enabled' : 'Enable Push Notifications',
+      ),
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
+        backgroundColor: isAuthorized ? Colors.green.shade100 : null,
+        foregroundColor: isAuthorized ? Colors.green.shade800 : null,
       ),
     );
   }

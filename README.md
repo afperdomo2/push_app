@@ -50,7 +50,7 @@ dart pub global activate flutterfire_cli
 dart pub global run flutterfire_cli:flutterfire configure
 ```
 
-## 🔔 3. Notificaciones push3. Notificaciones push
+## 🔔 3. Notificaciones push
 
 Las notificaciones push son mensajes que se envían desde un servidor a dispositivos específicos, permitiendo interactuar con usuarios incluso cuando la aplicación no está abierta.
 
