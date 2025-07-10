@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:push_app/config/handlers/firebase_messaging_handler.dart';
+import 'package:push_app/config/handlers/local_notifications_initializer.dart';
 import 'package:push_app/config/handlers/notification_interaction_handler.dart';
 import 'package:push_app/config/router/app_router.dart';
 import 'package:push_app/config/theme/app_theme.dart';
@@ -40,7 +41,9 @@ class MainApp extends StatelessWidget {
       theme: AppTheme.theme,
 
       /// 4. Configurar el manejador de interacciones con notificaciones
-      builder: (context, child) => NotificationInteractionHandler(child: child!),
+      builder: (context, child) => LocalNotificationsInitializer(
+        child: NotificationInteractionHandler(child: child!),
+      ),
     );
   }
 }

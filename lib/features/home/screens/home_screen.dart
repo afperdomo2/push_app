@@ -17,30 +17,23 @@ class HomeScreen extends StatelessWidget {
 
     final notificationList = notificationsState.notificationList;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Home Screen'),
-      ),
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Status card with color based on permission status
+          _NotificationsStatus(notificationsState: notificationsState),
 
-      // Body
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Status card with color based on permission status
-            _NotificationsStatus(notificationsState: notificationsState),
+          const SizedBox(height: 24),
 
-            const SizedBox(height: 24),
+          _NotificationRequestButton(notificationsBloc: notificationsBloc),
 
-            _NotificationRequestButton(notificationsBloc: notificationsBloc),
+          const SizedBox(height: 24),
 
-            const SizedBox(height: 24),
-
-            // List of notifications
-            _NotificationListView(notificationList: notificationList),
-          ],
-        ),
+          // List of notifications
+          _NotificationListView(notificationList: notificationList),
+        ],
       ),
     );
   }
@@ -55,58 +48,59 @@ class _NotificationListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (notificationList.isEmpty)
-            const Text(
-              'No notifications received yet.',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            )
-          else
-            const Text(
-              'Received Notifications:',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: notificationList.length,
-              itemBuilder: (context, index) {
-                final notification = notificationList[index];
-                return Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: ListTile(
-                    title: Text(notification.title),
-                    subtitle: Text(notification.body),
-                    leading: notification.imageUrl != null && notification.imageUrl!.isNotEmpty
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              notification.imageUrl!,
-                              width: 50,
-                              height: 50,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, _, __) => const Icon(Icons.notifications),
-                            ),
-                          )
-                        : const Icon(Icons.notifications),
-                    trailing: const Icon(Icons.arrow_forward_ios),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (notificationList.isEmpty)
+          const Text(
+            'No notifications received yet.',
+            style: TextStyle(fontSize: 16, color: Colors.grey),
+          )
+        else ...[
+          const Text(
+            'Received Notifications:',
+            style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(height: 12),
+          // Usamos ListView.builder con shrinkWrap para que funcione dentro de SingleChildScrollView
+          ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: notificationList.length,
+            itemBuilder: (context, index) {
+              final notification = notificationList[index];
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: ListTile(
+                  title: Text(notification.title),
+                  subtitle: Text(notification.body),
+                  leading: notification.imageUrl != null && notification.imageUrl!.isNotEmpty
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.network(
+                            notification.imageUrl!,
+                            width: 50,
+                            height: 50,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, _, __) => const Icon(Icons.notifications),
+                          ),
+                        )
+                      : const Icon(Icons.notifications),
+                  trailing: const Icon(Icons.arrow_forward_ios),
 
-                    // Navegar a la pantalla de detalles de la notificación
-                    onTap: () => {
-                      context.pushNamed(
-                        NotificationDetailsScreen.routeName,
-                        pathParameters: {'messageId': notification.id},
-                      ),
-                    },
-                  ),
-                );
-              },
-            ),
+                  // Navegar a la pantalla de detalles de la notificación
+                  onTap: () => {
+                    context.pushNamed(
+                      NotificationDetailsScreen.routeName,
+                      pathParameters: {'messageId': notification.id},
+                    ),
+                  },
+                ),
+              );
+            },
           ),
         ],
-      ),
+      ],
     );
   }
 }
