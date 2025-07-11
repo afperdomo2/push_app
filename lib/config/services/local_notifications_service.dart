@@ -1,7 +1,10 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:push_app/config/router/app_router.dart';
+import 'package:push_app/features/home/screens/notification_details_screen.dart';
 
 /// Servicio para manejar notificaciones locales usando flutter_local_notifications
 ///
@@ -39,8 +42,16 @@ class LocalNotificationsService {
     debugPrint('🔔 Usuario interactuó con notificación: ${response.id}');
     debugPrint('📦 Payload: $payload');
 
-    // Aquí puedes agregar navegación o lógica específica
-    // Por ejemplo, navegar a una pantalla específica basada en el payload
+    // Navegar a una pantalla específica basada en el payload
+    if (payload != null) {
+      Map<String, dynamic> decodedPayload = jsonDecode(payload);
+      String messageId = decodedPayload['messageId'];
+
+      appRouter.pushNamed(
+        NotificationDetailsScreen.routeName,
+        pathParameters: {'messageId': messageId},
+      );
+    }
   }
 
   /// Muestra una notificación simple

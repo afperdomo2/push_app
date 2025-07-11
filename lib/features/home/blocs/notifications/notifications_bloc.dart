@@ -1,5 +1,6 @@
 // ignore_for_file: avoid_print
 
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
@@ -96,10 +97,12 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     );
 
     // Muestra la notificación localmente
+    Map<String, String> payload = {'messageId': messageId};
     showLocalNotification(
       id: notification.id.hashCode,
       title: notification.title,
       body: notification.body,
+      payload: jsonEncode(payload),
     );
 
     // Agrega la notificación al estado del bloc
