@@ -6,7 +6,6 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:push_app/config/helpers/message_utils.dart';
-import 'package:push_app/config/services/local_notifications_service.dart';
 import 'package:push_app/domain/entities/push_message.dart';
 
 part 'notifications_event.dart';
@@ -14,8 +13,16 @@ part 'notifications_state.dart';
 
 class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
   FirebaseMessaging messaging = FirebaseMessaging.instance;
+  final Future<void> Function({
+    required int id,
+    required String title,
+    required String body,
+    String? payload,
+  }) showLocalNotification;
 
-  NotificationsBloc() : super(const NotificationsInitial()) {
+  NotificationsBloc({
+    required this.showLocalNotification,
+  }) : super(const NotificationsInitial()) {
     // Escucha los cambios en el estado de las notificaciones
     on<NotificationStatusChanged>(_updateNotificationState);
     on<NotificationReceived>(_onPushMessageReceived);
@@ -89,12 +96,12 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
     );
 
     // Muestra la notificación localmente
-    LocalNotificationsService.showNotification(
+    showLocalNotification(
       id: notification.id.hashCode,
       title: notification.title,
       body: notification.body,
-      // payload: notification.toJson(),
     );
+
     // Agrega la notificación al estado del bloc
     add(NotificationReceived(notification));
 

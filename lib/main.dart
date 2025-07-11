@@ -3,7 +3,6 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:push_app/config/handlers/firebase_messaging_handler.dart';
-import 'package:push_app/config/handlers/local_notifications_initializer.dart';
 import 'package:push_app/config/handlers/notification_interaction_handler.dart';
 import 'package:push_app/config/router/app_router.dart';
 import 'package:push_app/config/services/local_notifications_service.dart';
@@ -27,7 +26,11 @@ void main() async {
   runApp(
     MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => NotificationsBloc()),
+        BlocProvider(
+          create: (_) => NotificationsBloc(
+            showLocalNotification: LocalNotificationsService.showNotification,
+          ),
+        ),
       ],
       child: const MainApp(),
     ),
@@ -45,7 +48,7 @@ class MainApp extends StatelessWidget {
       theme: AppTheme.theme,
 
       /// 5. Configurar el manejador de interacciones con notificaciones push
-      builder: (context, child) => LocalNotificationsInitializer(child: child!),
+      builder: (context, child) => NotificationInteractionHandler(child: child!),
     );
   }
 }
