@@ -6,6 +6,7 @@ import 'package:push_app/config/handlers/firebase_messaging_handler.dart';
 import 'package:push_app/config/handlers/local_notifications_initializer.dart';
 import 'package:push_app/config/handlers/notification_interaction_handler.dart';
 import 'package:push_app/config/router/app_router.dart';
+import 'package:push_app/config/services/local_notifications_service.dart';
 import 'package:push_app/config/theme/app_theme.dart';
 import 'package:push_app/features/home/blocs/notifications/notifications_bloc.dart';
 import 'package:push_app/firebase_options.dart';
@@ -19,6 +20,9 @@ void main() async {
 
   /// 3. Configurar Firebase Messaging para manejar mensajes en segundo plano
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
+
+  /// 4. Inicializar el servicio de notificaciones locales
+  await LocalNotificationsService.initialize();
 
   runApp(
     MultiBlocProvider(
@@ -40,10 +44,8 @@ class MainApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
 
-      /// 4. Configurar el manejador de interacciones con notificaciones
-      builder: (context, child) => LocalNotificationsInitializer(
-        child: NotificationInteractionHandler(child: child!),
-      ),
+      /// 5. Configurar el manejador de interacciones con notificaciones push
+      builder: (context, child) => LocalNotificationsInitializer(child: child!),
     );
   }
 }

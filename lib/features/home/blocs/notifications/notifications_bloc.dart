@@ -6,6 +6,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:push_app/config/helpers/message_utils.dart';
+import 'package:push_app/config/services/local_notifications_service.dart';
 import 'package:push_app/domain/entities/push_message.dart';
 
 part 'notifications_event.dart';
@@ -87,7 +88,16 @@ class NotificationsBloc extends Bloc<NotificationsEvent, NotificationsState> {
           : message.notification?.apple?.imageUrl,
     );
 
+    // Muestra la notificación localmente
+    LocalNotificationsService.showNotification(
+      id: notification.id.hashCode,
+      title: notification.title,
+      body: notification.body,
+      // payload: notification.toJson(),
+    );
+    // Agrega la notificación al estado del bloc
     add(NotificationReceived(notification));
+
     print(notification);
   }
 
